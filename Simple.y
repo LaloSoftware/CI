@@ -67,10 +67,10 @@ program : LET
 	END 		{ gen_code( HALT, 0 ); YYACCEPT; }
 ;
 declarations :
-	| INTEGER id_seq IDENTIFIER '.' { install( $3 ); }
+	| INTEGER id_seq IDENTIFIER ';;;' { install( $3 ); }
 ;
 id_seq :
-	| id_seq IDENTIFIER ',' { install( $2 ); }
+	| id_seq IDENTIFIER '<->' { install( $2 ); }
 ;
 commands : /* empty */
 	| commands command ';'
@@ -121,7 +121,7 @@ int main( int argc, char *argv[] )
 	printf ( "Parse Completed\n" );
 	getch();
 	if ( errors == 0 )
-	{ /*print_code ();*/
+	{ 
 		fetch_execute_cycle();
 	}
 }

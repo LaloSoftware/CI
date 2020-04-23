@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <commdlg.h>
 #include <CommCtrl.h>
+#include <exception>
 
 
 #define MAX_LOADSTRING 100
@@ -145,7 +146,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     CHARFORMAT2 cf; //Formato del texto
     DWORD dwEVM; //Evento de captura
     HFONT hFont; //Manejador de fuente
-    char cFile[MAX_PATH]; //Guarda la ruta para el compilador
+    char path[MAX_PATH]; //Guarda la ruta para el compilador
     switch (message)
     {
     case WM_NOTIFY:
@@ -201,7 +202,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 char cFile[MAX_PATH];
                 TCHAR* ptchBuffer;
                 wcstombs(cFile, szFile, MAX_PATH);
-                if (NULL == (file = fopen(cFile, "rb"))) {
+                strcpy(path, cFile);
+                if (NULL == (file = fopen(path, "rb"))) {
                     MessageBox(hWnd, L"Error al leer el archivo", L"Error", MB_OK | MB_ICONERROR);
                 }
                 else {
@@ -247,7 +249,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 char cFile[MAX_PATH];
                 TCHAR* ptchBuffer = NULL;
                 wcstombs(cFile, szFile, MAX_PATH);
-                if (NULL == (file = fopen(cFile, "wb"))) {
+                strcpy(path, cFile);
+                if (NULL == (file = fopen(path, "wb"))) {
                     MessageBox(hWnd, L"Error al crear el archivo", L"Error", MB_OK | MB_ICONERROR);
                 }
                 else {
@@ -271,56 +274,21 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             } } break;
             case ID_COMPILAR_COMPILAR:
             {
-                TCHAR szFile[MAX_PATH];
-                ZeroMemory(szFile, MAX_PATH);
-                OPENFILENAME ofn;
-                ZeroMemory(&ofn, sizeof(OPENFILENAME));
-                ofn.lStructSize = sizeof(OPENFILENAME);
-                ofn.Flags = OFN_FILEMUSTEXIST | OFN_PATHMUSTEXIST |
-                    OFN_OVERWRITEPROMPT;
-                ofn.hwndOwner = hWnd;
-                ofn.lpstrFilter = _T("Tipos de formatos soportados(*.spider)\0 * .spider\0spider(*.spider)\0\0");
-                ofn.lpstrTitle = _T("Guardar archivo de spider");
-                ofn.lpstrFile = szFile;
-                ofn.nMaxFile = MAX_PATH;
-                if (IDOK == GetSaveFileName(&ofn)) {
-                    FILE* file;
-                    int iLength;
-                    PSTR pstrBuffer;
-                    TCHAR* ptchBuffer = NULL;
-                    wcstombs(cFile, szFile, MAX_PATH);
-                    if (NULL == (file = fopen(cFile, "wb"))) {
-                        MessageBox(hWnd, L"Error al crear el archivo", L"Error", MB_OK | MB_ICONERROR);
-                    }
-                    else {
-
-                        iLength = GetWindowTextLength(hWndEdit);
-                        if (NULL == (pstrBuffer = (PSTR)malloc(sizeof(char) *
-                            (iLength + 1))) ||
-                            NULL == (ptchBuffer = (TCHAR*)malloc(sizeof(TCHAR) *
-                            (iLength + 1))))
-                        {
-                            MessageBox(hWnd, L"Error al reservar memoria",
-                                L"Error", MB_OK | MB_ICONERROR);
-                            fclose(file);
-                        }
-                        GetWindowText(hWndEdit, ptchBuffer, iLength + 1);
-                        wcstombs(pstrBuffer, ptchBuffer, iLength + 1);
-                        fwrite(pstrBuffer, 1, iLength + 1, file);
-                        fclose(file);
-                        free(pstrBuffer);
-                        free(ptchBuffer);
-                    }
+                try
+                {
+                    char comp[255];
+                    strcpy(comp, "\"C:\\Users\\eduar\\Documents\\Cuatri 8\\Compiladores e interpretes\\Proyecto final\\prueba.bat\" ");
+                    strcat(comp, "\"");
+                    strcat(comp, path);
+                    strcat(comp, "\"");
+                    system(comp);
+                    return 0;
                 }
-                char comp[255];
-                char path[255];
-                strcpy(comp, "\"C:\\Users\\eduar\\Documents\\Cuatri 8\\Compiladores e interpretes\\Proyecto final\\prueba.bat\" ");
-                strcpy(path, cFile);
-                strcat(comp, "\"");
-                strcat(comp, path);
-                strcat(comp, "\"");
-                system(comp);
-                return 0;
+                catch (const std::exception& e)
+                {
+                    MessageBox(hWnd, L"Error inesperado, puede que necesite guardar primero", L"Error", MB_OK | MB_ICONERROR);
+                }
+                
                 /*char nombre[255];
                 char path[255];
                 //strcpy(nombre, "\"C:\\Users\\eduar\\Documents\\Cuatri 8\\Compiladores e interpretes\\Proyecto final\\compi.exe\" ");

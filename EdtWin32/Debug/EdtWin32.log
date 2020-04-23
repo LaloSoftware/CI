@@ -1,3 +1,5 @@
 ﻿  EdtWin32.cpp
-C:\Users\eduar\Documents\Cuatri 8\EdtWin32\EdtWin32.cpp(146,11): warning C4101: 'dwEVM': variable local sin referencia
-  EdtWin32.vcxproj -> C:\Users\eduar\Documents\Cuatri 8\EdtWin32\Debug\EdtWin32.exe
+C:\Users\eduar\Documents\GitHub\CI\EdtWin32\EdtWin32.cpp(146,17): warning C4101: 'cf': variable local sin referencia
+C:\Users\eduar\Documents\GitHub\CI\EdtWin32\EdtWin32.cpp(147,11): warning C4101: 'dwEVM': variable local sin referencia
+C:\Users\eduar\Documents\GitHub\CI\EdtWin32\EdtWin32.cpp(287,46): warning C4101: 'e': variable local sin referencia
+  EdtWin32.vcxproj -> C:\Users\eduar\Documents\GitHub\CI\EdtWin32\Debug\EdtWin32.exe

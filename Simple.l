@@ -12,7 +12,7 @@ ID [a-z][a-z0-9]*
 CADENA  \"(\\.|[^"\\])*\"
 
 %%
-":="            { return(ASSGNOP); }
+":=>"           { return(ASSGNOP); }
 {DIGIT}+        { yylval.intval = atoi( yytext );return(NUMBER); }
 Haz             { return(DO); }
 siNo            { return(ELSE); }
@@ -26,7 +26,7 @@ leer            { return(READ); }
 saltar          { return(SKIP); }
 entonces        { return(THEN); }
 ciclarMientras  { return(WHILE); }
-escribir        { return(WRITE); }
+escribirNumero        { return(WRITE); }
 imprimir        { return(PRINT); }
 {CADENA}        {yylval.id = strdup(yytext); return(STRING); }
 {ID}            { yylval.id = (char *) strdup(yytext);return(IDENTIFIER); }
